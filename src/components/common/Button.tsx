@@ -1,14 +1,23 @@
 import { styled } from "@stitches/react";
-import { blue, green, red, whiteA } from "@radix-ui/colors";
+import { blackA, blue, green, red, violet, whiteA } from "@radix-ui/colors";
+import * as React from "react";
+
+export interface IconProps extends React.SVGAttributes<SVGElement> {
+  children?: never;
+  color?: string;
+}
 
 export const Button = styled("button", {
-  minWidth: "min-content",
+  minWidth: "max-content",
+  maxWidth: "max-content",
   height: "2rem",
   padding: "4px 8px",
   borderRadius: "4px",
   border: "none",
   fontWeight: "500",
-  fontSize: "0.875rem",
+  fontSize: "1rem",
+  transition: "all 200ms",
+
   "&:hover": {
     cursor: "pointer",
   },
@@ -19,6 +28,7 @@ export const Button = styled("button", {
     fullWidth: {
       true: {
         width: "100%",
+        maxWidth: "100%",
       },
     },
     size: {
@@ -33,13 +43,13 @@ export const Button = styled("button", {
     },
     color: {
       primary: {
-        backgroundColor: blue.blue10,
+        backgroundColor: violet.violet10,
         color: whiteA.whiteA12,
         "&:hover": {
-          backgroundColor: blue.blue11,
+          backgroundColor: violet.violet9,
         },
         "&:active": {
-          backgroundColor: blue.blue11,
+          backgroundColor: violet.violet8,
         },
         "&:focus": {
           boxShadow: `0 0 0 2px ${whiteA.whiteA6}`,
@@ -58,6 +68,19 @@ export const Button = styled("button", {
           boxShadow: `0 0 0 2px ${whiteA.whiteA6}`,
         },
       },
+      info: {
+        backgroundColor: blue.blue10,
+        color: whiteA.whiteA12,
+        "&:hover": {
+          backgroundColor: blue.blue9,
+        },
+        "&:active": {
+          backgroundColor: blue.blue8,
+        },
+        "&:focus": {
+          boxShadow: `0 0 0 2px ${whiteA.whiteA6}`,
+        },
+      },
       success: {
         backgroundColor: green.green9,
         color: whiteA.whiteA12,
@@ -68,3 +91,34 @@ export const Button = styled("button", {
     },
   },
 });
+
+type ButtonIconProps = React.ComponentProps<typeof ButtonPrimitive> & {
+  icon: React.ForwardRefExoticComponent<
+    IconProps & React.RefAttributes<SVGSVGElement>
+  >;
+  size?: string | number;
+  cursor?: string;
+  color?: string;
+};
+
+const ButtonPrimitive = styled("button", {
+  all: "unset",
+  "&:hover": {
+    cursor: "pointer",
+    opacity: 0.8,
+  },
+  "&:focus": {
+    boxShadow: `0 0 0 2px ${blackA.blackA11}`,
+  },
+});
+export const ButtonIcon = React.forwardRef<HTMLButtonElement, ButtonIconProps>(
+  ({ icon: Icon, size = 16, cursor = "pointer", color, ...props }, ref) => {
+    return (
+      <ButtonPrimitive ref={ref} {...props}>
+        <Icon color={color || "#000"} height={size} width={size} />
+      </ButtonPrimitive>
+    );
+  }
+);
+
+ButtonIcon.displayName = "ButtonIcon";

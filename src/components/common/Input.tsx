@@ -2,8 +2,8 @@ import { styled } from "@stitches/react";
 import { forwardRef } from "react";
 
 const InputWrapper = styled("div", {
+  flex: "1",
   position: "relative",
-  margin: "1rem 0",
 });
 const InputField = styled("input", {
   all: "unset",
@@ -16,7 +16,7 @@ const InputField = styled("input", {
   fontWeight: "500",
   fontSize: "0.875rem",
   "&::placeholder": {
-    color: "$textSecondary",
+    color: "$textSecondaryD",
   },
   "&:focus": {
     boxShadow: `0 0 0 1px #ccc`,
@@ -36,15 +36,13 @@ const InputField = styled("input", {
 });
 
 const IputLabel = styled("label", {
-  position: "absolute",
+  // position: "absolute",
   top: "-0.575rem",
   left: "8px",
   display: "block",
   fontSize: "0.875rem",
   fontWeight: "500",
   marginBottom: "4px",
-  backgroundColor: "$background",
-
   padding: "0 4px",
   variants: {
     // error: {
@@ -61,7 +59,7 @@ const InputHelper = styled("span", {
   fontSize: "0.75rem",
   fontWeight: "400",
   marginTop: "4px",
-  color: "$textSecondary",
+  color: "$textSecondaryD",
   marginLeft: "8px",
   variants: {
     error: {
@@ -72,14 +70,13 @@ const InputHelper = styled("span", {
   },
 });
 
-type InputProps = {
-  label: string;
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
   helper?: string;
   error?: {
     message?: string;
     type?: string;
   };
-  placeholder?: string;
   fullWidth?: boolean;
 };
 
@@ -87,7 +84,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, helper, error, ...props }, ref) => {
     return (
       <InputWrapper>
-        <IputLabel>{label}</IputLabel>
+        {label && <IputLabel>{label}</IputLabel>}
         <InputField {...props} ref={ref} invalid={!!error} />
 
         {error?.message ? (

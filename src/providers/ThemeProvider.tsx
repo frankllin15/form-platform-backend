@@ -1,5 +1,5 @@
 import { ThemeProvider as Provider } from "next-themes";
-import { darkTheme } from "@/styles/stitches.config";
+import { darkTheme } from "@/../stitches.config";
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   return (

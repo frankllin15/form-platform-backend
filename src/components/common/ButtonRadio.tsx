@@ -4,10 +4,7 @@ import { forwardRef } from "react";
 const ButtonRadioWrapper = styled("div", {
   display: "flex",
   alignItems: "center",
-  height: "1.7rem",
   maxWidth: "stretch",
-  marginLeft: ".5rem",
-  gap: "0.5rem",
   "&:hover": {
     opacity: 0.8,
   },
@@ -23,7 +20,7 @@ const ButtonRadioWrapper = styled("div", {
 const Label = styled("label", {
   fontSize: "0.875rem",
   fontWeight: "500",
-  color: "$text",
+  color: "$textD",
   variants: {
     color: {
       secondary: {
@@ -41,43 +38,34 @@ const Label = styled("label", {
 const InputWrapper = styled("div", {});
 
 export type ButtonRadioProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  options: {
-    label: string;
-    value: string;
-    defaultChecked?: boolean;
-  }[];
   label: string;
+  value: string;
+  defaultChecked?: boolean;
   onChange: (value: any) => void;
 };
-const ButtonRadioInput = styled("input", {
-  width: ".875rem",
+export const ButtonRadioInput = styled("input", {
   cursor: "pointer",
   "&:checked + label": {
-    color: "$text",
+    color: "$textD",
   },
 });
 
 const ButtonRadio = forwardRef<HTMLInputElement, ButtonRadioProps>(
-  ({ label, options, name, ...props }: ButtonRadioProps, ref) => {
+  ({ label, defaultChecked, value, name, ...props }: ButtonRadioProps, ref) => {
     return (
-      <InputWrapper>
-        <Label>{label}</Label>
-        {options.map((option, index) => (
-          <ButtonRadioWrapper key={index}>
-            <ButtonRadioInput
-              ref={ref}
-              {...props}
-              type="radio"
-              name={name}
-              checked={option.defaultChecked}
-              value={option.value}
-            />
-            <Label color="secondary" size="small">
-              {option.label}
-            </Label>
-          </ButtonRadioWrapper>
-        ))}
-      </InputWrapper>
+      <ButtonRadioWrapper>
+        <ButtonRadioInput
+          ref={ref}
+          {...props}
+          type="radio"
+          name={name}
+          checked={defaultChecked}
+          value={value}
+        />
+        <Label color="secondary" size="small">
+          {label}
+        </Label>
+      </ButtonRadioWrapper>
     );
   }
 );

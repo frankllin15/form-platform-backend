@@ -19,6 +19,8 @@ import {
   useForm,
 } from "react-hook-form";
 import { AsideController } from "@/components/Form/AsideController";
+import { useMutation } from "react-query";
+import { createFormMutation } from "@/lib/mutations/form.mutation";
 
 const Container = styled("div", {
   padding: "2rem 1.5rem",
@@ -36,30 +38,26 @@ const NewformPage: NextPage = () => {
   const [stage, setStage] = useState("FORM_INFO");
   const methods = useForm({
     defaultValues: {
-      title: "",
+      name: "",
       description: "",
       questions: [
         {
           title: "",
+          questionTypeId: 1,
           text: "",
           options: [
             {
               text: "Op1",
-              answer: false,
-            },
-          ],
-        },
-        {
-          title: "Ques",
-          text: "",
-          options: [
-            {
-              text: "",
-              answer: false,
             },
           ],
         },
       ],
+    },
+  });
+
+  const { mutate: createForm } = useMutation(createFormMutation, {
+    onSuccess: (data) => {
+      console.log("success", data);
     },
   });
 
@@ -76,22 +74,27 @@ const NewformPage: NextPage = () => {
     name: "questions",
   });
 
+  const handleSubmit = methods.handleSubmit((data) => {
+    console.log(data);
+    createForm({ authorId: "clafss4t600036csg32wozpi7", ...data });
+  });
+
   return (
     <Container>
       <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit((e) => console.log("Submit", e))}>
+        <Form onSubmit={handleSubmit}>
           {stage === "FORM_INFO" ? (
             <>
               <Title as="h2">Informações do formulário</Title>
               <Controller
-                name="title"
+                name="name"
                 control={methods.control}
                 rules={{ required: "Campo obriatorio" }}
                 render={({ field, formState: { errors } }) => (
                   <Input
                     {...field}
                     placeholder="Título do formulário"
-                    error={errors.title}
+                    error={errors.name}
                     helper="Título do formulário"
                     label="Título"
                     fullWidth
@@ -155,18 +158,20 @@ const NewformPage: NextPage = () => {
 
           {/* <FormQuestion label="Questões" name="questions" /> */}
 
-          {/* <Button
+          <Button
             onClick={() =>
               append({
                 title: "",
                 text: "",
                 options: [],
+                questionTypeId: 1,
               })
             }
             type="button"
           >
             Adicionar
-          </Button> */}
+          </Button>
+          <Button type="submit">Enviar</Button>
         </Form>
       </FormProvider>
     </Container>

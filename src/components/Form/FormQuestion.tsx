@@ -1,5 +1,6 @@
 import { styled } from "@stitches/react";
 import {
+  Controller,
   useFieldArray,
   UseFieldArrayProps,
   useFormContext,
@@ -55,6 +56,7 @@ const types = [
   },
 ];
 
+// tipos de questões que podem ter uma op
 export const typesUnique = ["text", "number", "date", "paragraph"];
 
 type Props = UseFieldArrayProps & {
@@ -94,7 +96,7 @@ export const FormQuestion = ({
   label,
   onRemoveQuestion,
 }: Props) => {
-  const { register, resetField } = useFormContext();
+  const { register, resetField, control, setValue } = useFormContext();
   const {
     fields: options,
     append: appendOption,
@@ -112,10 +114,9 @@ export const FormQuestion = ({
 
   const handleSelectType = (value: string) => {
     setSelectType(value);
+    setValue(`${name}.questionTypeId`, 1);
     removeOption(Array.from({ length: options.length - 1 }, (_, i) => i + 1)); // remove all options except the first one
   };
-
-  console.log("name", name);
 
   return (
     <Box
@@ -133,7 +134,7 @@ export const FormQuestion = ({
         <Input
           fullWidth
           placeholder="Título da pergunta"
-          {...register(`${name}.title` as const)}
+          {...register(`${name}.label` as const)}
         />
         <Select
           value={selectType}
@@ -165,10 +166,22 @@ export const FormQuestion = ({
         <ButtonIcon size={25} icon={TrashIcon} onClick={onRemoveQuestion} />
         <SwitchLabel>
           <span>Obrigatório</span>
-          <Switch
-            {...register(`${name}.required` as const)}
-            defaultChecked={false}
+          <Controller
+            name={`${name}.required`}
+            defaultValue={false}
+            control={control}
+            render={({ field }) => (
+              <Switch
+                defaultChecked={field.value}
+                onCheckedChange={field.onChange}
+                {...field}
+              />
+            )}
           />
+          {/* <Switch
+            {...register(`${name}.required` as const, {})}
+            defaultChecked={false}
+          /> */}
         </SwitchLabel>
         {/* <Switch /> */}
       </Box>

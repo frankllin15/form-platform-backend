@@ -2,6 +2,7 @@ import * as SwitchPrimitive from "@radix-ui/react-switch";
 import { blackA, violet } from "@radix-ui/colors";
 import { styled } from "@stitches/react";
 import { forwardRef } from "react";
+import { on } from "events";
 
 const StyledSwitch = styled(SwitchPrimitive.Root, {
   all: "unset",
@@ -49,9 +50,3 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 );
 
 Switch.displayName = "Switch";
-
-(props: SwitchPrimitive.SwitchProps) => (
-  <StyledSwitch {...props}>
-    <StyledThumb />
-  </StyledSwitch>
-);
